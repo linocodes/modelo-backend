@@ -36,7 +36,7 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 @Configuration
 @EnableTransactionManagement
-@PropertySource({ "classpath:persistence-jndi.properties" })
+@PropertySource({ "classpath:persistence-jndi-mysql.properties" })
 @ComponentScan({ "br.gov.mg.meioambiente.persistence" })
 @EnableJpaRepositories(basePackages = "br.gov.mg.meioambiente.persistence.repository.dao")
 public class PersistenceJNDIConfig {

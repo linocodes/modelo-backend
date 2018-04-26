@@ -17,7 +17,8 @@ public abstract class BaseEntity<PK> implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Basic(optional = false)
+	//@GeneratedValue(strategy = GenerationType.SEQUENCE)	
+	@Basic(optional= false)
 	@Column(name = "id", nullable = false, columnDefinition = "BIGINT UNSIGNED")
 	protected PK id;
 

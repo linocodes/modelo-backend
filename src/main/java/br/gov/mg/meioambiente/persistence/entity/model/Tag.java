@@ -1,22 +1,29 @@
 package br.gov.mg.meioambiente.persistence.entity.model;
 
 import javax.persistence.AttributeOverride;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.GenericGenerator;
 
 import br.gov.mg.meioambiente.persistence.entity.BaseEntity;
 
-@Entity(name = "Tag")
+@Entity
 @Table(name = "tag")
 @DynamicUpdate
-@AttributeOverride(name = "id", column = @Column(name = "tag_id", nullable = false, columnDefinition = "BIGINT UNSIGNED"))
+@AttributeOverride(name = "id", column = @Column(name = "tag_id", nullable = false))
+//@SequenceGenerator(sequenceName = "customer_tag", allocationSize = 1, name = "SEQ_TAG")
 public class Tag extends BaseEntity<Long> {
 
 	private static final long serialVersionUID = -7655961997031546542L;
-
+	
 	@Column(nullable = false)
 	private String name;
 

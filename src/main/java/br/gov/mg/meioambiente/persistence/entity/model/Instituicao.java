@@ -1,18 +1,25 @@
 package br.gov.mg.meioambiente.persistence.entity.model;
 
 import javax.persistence.AttributeOverride;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import br.gov.mg.meioambiente.persistence.entity.BaseEntityAudit;
 
 @Entity
-@AttributeOverride(name = "id", column = @Column(name = "instituicao_id", nullable = false, columnDefinition = "BIGINT UNSIGNED")) 
 @Table(name = "instituicao")
+@AttributeOverride(name = "id", column = @Column(name = "instituicao_id", nullable = false)) 
+@SequenceGenerator(sequenceName = "customer_instituicao", allocationSize = 1, name = "SEQ_INSti")
 public class Instituicao extends BaseEntityAudit<Long> {
 
 	private static final long serialVersionUID = 1L;
+	
 
 	@Column(name="sigla", nullable=false)
 	private String sigla;

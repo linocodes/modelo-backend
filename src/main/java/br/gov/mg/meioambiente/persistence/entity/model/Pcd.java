@@ -1,19 +1,25 @@
 package br.gov.mg.meioambiente.persistence.entity.model;
 
 import javax.persistence.AttributeOverride;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import br.gov.mg.meioambiente.persistence.entity.BaseEntityAudit;
 
 @Entity
 @Table(name = "pcd")
-@AttributeOverride(name = "id", column = @Column(name = "pcd_id", nullable = false, columnDefinition = "BIGINT UNSIGNED"))
+@AttributeOverride(name = "id", column = @Column(name = "pcd_id", nullable = false))
+//@SequenceGenerator(sequenceName = "customer_pcd", allocationSize = 1, name = "SEQ_PCD")
 public class Pcd extends BaseEntityAudit<Long> {
 	
 	private static final long serialVersionUID = -1390992359712683300L;
-
+	
 	@Column(name="codigo", nullable=false)
 	private String codigo;
 	
@@ -41,8 +47,8 @@ public class Pcd extends BaseEntityAudit<Long> {
 	@Column(name="status", nullable=false)
 	private String status;
 	
-	@Column(name="automatica", nullable=false)
-	private Boolean automatica;
+	@Column(name="automatica", nullable=false, length = 1)
+	private Long automatica;
 
 	
 	//-------------- Get's & Set's -------------------
@@ -127,42 +133,18 @@ public class Pcd extends BaseEntityAudit<Long> {
 		this.status = status;
 	}
 
-	public Boolean getAutomatica() {
+	
+	public Long getAutomatica() {
 		return automatica;
 	}
 
-	public void setAutomatica(Boolean automatica) {
+	public void setAutomatica(Long automatica) {
 		this.automatica = automatica;
 	}
-	
-	
-	//-------------- Construtores -------------------
-	
+
 	public Pcd() {}
 	
-	public Pcd(String codigo, String nome, String instituicao, String latitude, String longitude, String altitude,
-			String municipio, String tipo, String status, Boolean automatica) {
-		super();
-		this.codigo = codigo;
-		this.nome = nome;
-		this.instituicao = instituicao;
-		this.latitude = latitude;
-		this.longitude = longitude;
-		this.altitude = altitude;
-		this.municipio = municipio;
-		this.tipo = tipo;
-		this.status = status;
-		this.automatica = automatica;
-	}
-	
-	//-------------- Soberscrituras -------------------
-	
-	@Override
-	public String toString() {
-		return "Pcd [codigo=" + codigo + ", nome=" + nome + ", instituicao=" + instituicao + ", latitude=" + latitude
-				+ ", longitude=" + longitude + ", altitude=" + altitude + ", municipio=" + municipio + ", tipo=" + tipo
-				+ ", status=" + status + ", automatica=" + automatica + "]";
-	}
+
 	
 
 

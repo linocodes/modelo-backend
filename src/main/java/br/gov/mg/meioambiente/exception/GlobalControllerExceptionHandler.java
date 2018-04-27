@@ -1,23 +1,31 @@
 package br.gov.mg.meioambiente.exception;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import br.gov.mg.meioambiente.exception.pojo.BaseException;
 import br.gov.mg.meioambiente.exception.pojo.RestErrorInfo;
 
 
 
 
 @ControllerAdvice
-class GlobalControllerExceptionHandler implements Serializable {
+class GlobalControllerExceptionHandler extends ResponseEntityExceptionHandler implements Serializable {
 	
 	private static final long serialVersionUID = -5149908048961962061L;
 	
@@ -50,6 +58,16 @@ class GlobalControllerExceptionHandler implements Serializable {
         //log.info("Converting Data Store exception to RestResponse : " + ex.getMessage());
 
         return new RestErrorInfo(ex, "You messed up.");
+    }
+    
+    @ExceptionHandler(value = {ConstraintViolationException.class})
+    public ResponseEntity<BaseException> handleBadInput(ConstraintViolationException ex) {
+        BaseException be = new BaseException();
+        //be.setStatusCode(StatusCodes.DATA_VALIDATION_ERROR);
+        Set vioations = ex.getConstraintViolations();
+        ConstraintViolation v = (ConstraintViolation) vioations.toArray()[0];
+        be.setMessage(v.getPropertyPath() + " " + v.getMessage());
+        return new ResponseEntity(be, HttpStatus.BAD_REQUEST);
     }
     
     /*

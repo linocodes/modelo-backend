@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.gov.mg.meioambiente.controller.BaseRestController;
+import br.gov.mg.meioambiente.persistence.entity.model.Pcd;
 import br.gov.mg.meioambiente.persistence.service.impl.PcdService;
 
 @RestController

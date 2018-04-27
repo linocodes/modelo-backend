@@ -6,11 +6,6 @@ import org.springframework.context.ApplicationEventPublisherAware;
 import br.gov.mg.meioambiente.exception.NotFoundException;
 
 
-/**
- * This class is meant to be extended by all REST resource "controllers".
- * It contains exception mapping and other common REST API functionality
- */
-//@ControllerAdvice?
 public abstract class AbstractRestHandler implements ApplicationEventPublisherAware {
 
     protected ApplicationEventPublisher eventPublisher;

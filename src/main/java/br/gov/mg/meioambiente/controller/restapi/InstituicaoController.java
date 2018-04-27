@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.gov.mg.meioambiente.controller.BaseRestController;
 import br.gov.mg.meioambiente.persistence.entity.model.Instituicao;
-
+import br.gov.mg.meioambiente.persistence.service.impl.InstituicaoService;
 
 @RestController
 @RequestMapping(value = "instituicao")

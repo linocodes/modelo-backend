@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.ConstraintViolationException;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -90,6 +92,10 @@ public abstract class AbstractService<T, PK extends Serializable> implements Bas
 
 			repository.saveAndFlush(entity);
 			afterCreate(entity);
+
+		} catch (ConstraintViolationException cst) {
+			new LogMessagem().printErrorLog(cst);
+			throw new ConstraintViolationException (log_inserindo, cst.getConstraintViolations());
 
 		} catch (Exception e) {
 			new LogMessagem().printErrorLog(e);

@@ -1,7 +1,5 @@
 package br.gov.mg.meioambiente.persistence.entity.model;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,51 +12,33 @@ import br.gov.mg.meioambiente.persistence.entity.BaseEntityAudit;
 
 @Entity
 @Table(name = "instituicao")
-@AttributeOverride(name = "id", column = @Column(name = "instituicao_id", nullable = false)) 
-@SequenceGenerator(sequenceName = "customer_instituicao", allocationSize = 1, name = "SEQ_INSti")
 public class Instituicao extends BaseEntityAudit<Long> {
 
 	private static final long serialVersionUID = 1L;
-	
 
-	@Column(name="sigla", nullable=false)
+	@Id
+	@Column(name = "instituicao_id")
+	@SequenceGenerator(name = "instituicao", sequenceName = "seq_instituicao", allocationSize = 1)
+	@GeneratedValue(generator = "instituicao", strategy = GenerationType.SEQUENCE)
+	private Long id;
+
+	@Column(name = "sigla", nullable = false)
 	private String sigla;
-	
-	@Column(name="nome", nullable=false)
-	private String nome;
-	
-	@Column(name="contato", nullable=false)
-	private String contato;
-	
-	@Column(name="contato_telefone", nullable=false)
-	private String contato_telefone;
-	
-	@Column(name="contato_email", nullable=false)
-	private String contato_email;
-	
-	@Column(name="observacao")
-	private String observacao;
-	
-	
-	//----------- Construtores ---------------
-	
-	public Instituicao() {
-		
-	}
 
-	public Instituicao(String sigla, String nome, String contato, String contato_telefone, String contato_email, String observacao) {
-		
-		this.sigla = sigla;
-		this.nome = nome;
-		this.contato = contato;
-		this.contato_telefone = contato_telefone;
-		this.contato_email = contato_email;
-		this.observacao = observacao;
-		
-	}
-	
-	
-	//---------- Get's & Set's ----------------
+	@Column(name = "nome", nullable = false)
+	private String nome;
+
+	@Column(name = "contato", nullable = false)
+	private String contato;
+
+	@Column(name = "contato_telefone", nullable = false)
+	private String contato_telefone;
+
+	@Column(name = "contato_email", nullable = false)
+	private String contato_email;
+
+	@Column(name = "observacao")
+	private String observacao;
 
 	public Long getId() {
 		return id;
@@ -88,7 +68,7 @@ public class Instituicao extends BaseEntityAudit<Long> {
 		return contato;
 	}
 
-	public void setContato_nome(String contato) {
+	public void setContato(String contato) {
 		this.contato = contato;
 	}
 
@@ -116,26 +96,67 @@ public class Instituicao extends BaseEntityAudit<Long> {
 		this.observacao = observacao;
 	}
 
-	
-	//------------ Sobreposição ----------------------------
-	
 	@Override
-	public String toString() {
-		
-		StringBuilder s = new StringBuilder();
-		
-		s.append("Instituição [");
-			s.append("id:").append(this.id).append(", ");
-			s.append("sigla:").append(this.sigla).append(", ");
-			s.append("nome:").append(this.nome).append(", ");
-			s.append("contato:").append(this.contato).append(", ");
-			s.append("contato_telefone:").append(this.contato_telefone).append(", ");
-			s.append("contato_email:").append(this.contato_email).append(", ");
-			s.append("observacao:").append(this.observacao).append(", ");
-		s.append("]");
-		
-		return s.toString();
-		
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((contato == null) ? 0 : contato.hashCode());
+		result = prime * result + ((contato_email == null) ? 0 : contato_email.hashCode());
+		result = prime * result + ((contato_telefone == null) ? 0 : contato_telefone.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+		result = prime * result + ((observacao == null) ? 0 : observacao.hashCode());
+		result = prime * result + ((sigla == null) ? 0 : sigla.hashCode());
+		return result;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Instituicao other = (Instituicao) obj;
+		if (contato == null) {
+			if (other.contato != null)
+				return false;
+		} else if (!contato.equals(other.contato))
+			return false;
+		if (contato_email == null) {
+			if (other.contato_email != null)
+				return false;
+		} else if (!contato_email.equals(other.contato_email))
+			return false;
+		if (contato_telefone == null) {
+			if (other.contato_telefone != null)
+				return false;
+		} else if (!contato_telefone.equals(other.contato_telefone))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (nome == null) {
+			if (other.nome != null)
+				return false;
+		} else if (!nome.equals(other.nome))
+			return false;
+		if (observacao == null) {
+			if (other.observacao != null)
+				return false;
+		} else if (!observacao.equals(other.observacao))
+			return false;
+		if (sigla == null) {
+			if (other.sigla != null)
+				return false;
+		} else if (!sigla.equals(other.sigla))
+			return false;
+		return true;
+	}
+	
+
 	
 }

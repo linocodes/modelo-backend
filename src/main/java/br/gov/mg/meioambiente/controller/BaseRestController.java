@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
@@ -22,8 +23,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import br.gov.mg.meioambiente.persistence.service.AbstractService;
 
-
-
 public abstract class BaseRestController<T, PK extends Serializable> extends AbstractRestHandler {
 
 	private AbstractService<T, PK> service;
@@ -32,14 +31,15 @@ public abstract class BaseRestController<T, PK extends Serializable> extends Abs
 		this.service = service;
 	}
 
-	@RequestMapping(value = "", method = RequestMethod.POST, consumes = { "application/json",
-			"application/xml" }, produces = { "application/json", "application/xml" })
+	@RequestMapping(value = "", 
+			method = RequestMethod.POST, 
+			consumes = { "application/json" }, 
+			produces = { "application/json" })
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<?> createEntity(@Valid @RequestBody T entity, Errors errors, HttpServletRequest request,
-			HttpServletResponse response) {
+	public ResponseEntity<?> createEntity(@Valid @RequestBody T entity, Errors errors, HttpServletRequest request, HttpServletResponse response) {
 
 		if (errors.hasErrors()) {
-			// throw new
+			// throw new ConstraintViolationException("erro", errors.);
 			// ParametrosInvalidosExceptionSade(MensagensErro.getAtributosInvalidos(errors));
 		}
 		T registro = this.service.createEntity(entity);
@@ -66,11 +66,11 @@ public abstract class BaseRestController<T, PK extends Serializable> extends Abs
 			// ParametrosInvalidosExceptionSade(MensagensErro.getAtributosInvalidos(errors));
 		}
 
-		//checkResourceFound(this.service.getById(id));
+		// checkResourceFound(this.service.getById(id));
 
-		//if (!((BaseEntity<T>) entity).getId().equals(id)) {
-			// throw new ParametrosInvalidosExceptionSade("id");
-		//}
+		// if (!((BaseEntity<T>) entity).getId().equals(id)) {
+		// throw new ParametrosInvalidosExceptionSade("id");
+		// }
 
 		T registro = this.service.update(entity);
 		return new ResponseEntity<T>(registro, HttpStatus.OK);

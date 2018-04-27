@@ -2,11 +2,7 @@ package br.gov.mg.meioambiente.persistence.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
@@ -15,51 +11,41 @@ public abstract class BaseEntity<PK> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	//@GeneratedValue(strategy = GenerationType.SEQUENCE)	
-	@Basic(optional= false)
-	@Column(name = "id", nullable = false, columnDefinition = "BIGINT UNSIGNED")
-	protected PK id;
-
 	@Column(name = "version")
 	@Version
 	private Long version;
-
-	public PK getId() {
-		return id;
-	}
 
 	public Long getVersion() {
 		return version;
 	}
 
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		hash += (this.getId() != null ? this.getId().hashCode() : 0);
-
-		return hash;
+	public void setVersion(Long version) {
+		this.version = version;
 	}
 
 	@Override
-	public boolean equals(Object object) {
-		if (this == object)
-			return true;
-		if (object == null)
-			return false;
-		if (getClass() != object.getClass())
-			return false;
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((version == null) ? 0 : version.hashCode());
+		return result;
+	}
 
-		BaseEntity<?> other = (BaseEntity<?>) object;
-		if (this.getId() != other.getId() && (this.getId() == null || !this.id.equals(other.id))) {
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
 			return false;
-		}
+		if (getClass() != obj.getClass())
+			return false;
+		BaseEntity other = (BaseEntity) obj;
+		if (version == null) {
+			if (other.version != null)
+				return false;
+		} else if (!version.equals(other.version))
+			return false;
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return this.getClass().getName() + " [ID=" + id + "]";
-	}
 }

@@ -28,7 +28,7 @@ public class AutenticacaoController implements Serializable {
 	private Logger logger;
 
 	@Autowired
-	private AutenticacaoService autenticacaoService;
+	private AutenticacaoService service;
 
 	/** Método que autentica um usuário e cria o token de acesso
 	 * 
@@ -39,29 +39,14 @@ public class AutenticacaoController implements Serializable {
 	@RequestMapping(value = "/criarToken", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody Usuario usuario, Errors errors) {
 
-		logger.info(new LogBuilder().adicionaMensagem("Autenticando usuario")
-				.adicionaParametro("Usuario", usuario.toString()).getMensagem());
+//		logger.info(new LogBuilder().adicionaMensagem("Autenticando usuario")
+//				.adicionaParametro("Usuario", usuario.toString()).getMensagem());
 
 		//if (errors.hasErrors()) {
 		//	throw new ParametrosInvalidosExceptionIdm(MensagensErro.getAtributosInvalidos(errors));
 		//}
 
-		return ResponseEntity.ok(autenticacaoService.autenticaUsuario(usuario));
-	}
-
-	/** Método que atualiza o token de acesso
-	 * 
-	 * @param request - Requisição com cabeçalho contendo o token
-	 * @return HTTPStatus 200 e o token do usuário autenticado em formato Json caso a atualização tenha sucesso <br>
-	 *         HTTP Status 400 e mensagem de erro em formato Json caso os parâmetros sejam inválidos */
-	@RequestMapping(value = "/atualizarToken", method = RequestMethod.GET)
-	public ResponseEntity<?> refreshAndGetAuthenticationToken(HttpServletRequest request) {
-
-		logger.info(new LogBuilder().adicionaMensagem("Atualizando token de acesso").getMensagem());
-
-		String token = request.getHeader("Authorization");
-		return ResponseEntity.ok(autenticacaoService.atualizaToken(token));
-
+		return ResponseEntity.ok(service.autenticaUsuario(usuario));
 	}
 
 }

@@ -67,6 +67,11 @@ public abstract class BaseRestController<T, PK extends Serializable> extends Abs
 		return new ResponseEntity<List<T>>(this.service.getAll(), HttpStatus.OK);
 	}
 
+	@GetMapping(value = "listar")
+	public ResponseEntity<List<T>> getListar() throws NotFoundException {
+		return new ResponseEntity<List<T>>(this.service.getAll(), HttpStatus.OK);
+	}
+
 	/*
 	 * 
 	 * @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = {

@@ -14,7 +14,7 @@
 
   <Loggers>
     <!-- Log everything in custom package -->
-    <Logger name="br.gov.mg.meioambiente.simge" level="debug" additivity="false">
+    <Logger name="br.gov.mg.meioambiente" level="debug" additivity="false">
       <AppenderRef ref="Console" />
       <AppenderRef ref="File" />
     </Logger>

@@ -1,6 +1,6 @@
 package br.gov.mg.meioambiente.exception;
 
-public class AppException extends RuntimeException {
+public class AppException extends RuntimeException  {
 
 	private static final long serialVersionUID = -4490060671494243485L;
 

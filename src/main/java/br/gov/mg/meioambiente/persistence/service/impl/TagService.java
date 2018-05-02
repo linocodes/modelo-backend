@@ -65,6 +65,7 @@ public class TagService extends AbstractService<Tag, Long> {
 
 	@Override
 	public void entityUpdate(Tag origem, Tag destino) {
+		//origem.
 		// TODO Auto-generated method stub
 		
 	}

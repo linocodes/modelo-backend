@@ -1,6 +1,7 @@
 package br.gov.mg.meioambiente.persistence.service;
 
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,11 +14,13 @@ import org.springframework.data.jpa.domain.Specification;
 import br.gov.mg.meioambiente.exception.AppException;
 import br.gov.mg.meioambiente.exception.NotFoundException;
 import br.gov.mg.meioambiente.logger.LogMessagem;
+import br.gov.mg.meioambiente.persistence.entity.BaseEntity;
+import br.gov.mg.meioambiente.persistence.entity.model.Tag;
 import br.gov.mg.meioambiente.persistence.repository.BaseRepository;
 import br.gov.mg.meioambiente.validator.EntityOptionalValidator;
+import lombok.extern.slf4j.Slf4j;
 
-
-
+@Slf4j
 public abstract class AbstractService<T, PK extends Serializable> implements BaseCrudService<T, PK> {
 
 	final static String log_listando = "Listando os registros na entidade: {}";
@@ -73,11 +76,12 @@ public abstract class AbstractService<T, PK extends Serializable> implements Bas
 	 */
 	public abstract void afterDelete(T entity);
 
-
 	public abstract void entityUpdate(T origem, T destino);
 
 	/**
 	 * Persiste os dados
+	 * 
+	 * @throws AppException
 	 */
 	@Override
 	public T createEntity(T entity) {
@@ -88,19 +92,20 @@ public abstract class AbstractService<T, PK extends Serializable> implements Bas
 			beforeCreate(entity);
 		}
 
-		try {
+		// try {
 
-			repository.saveAndFlush(entity);
-			afterCreate(entity);
+		repository.saveAndFlush(entity);
+		afterCreate(entity);
 
-		} catch (ConstraintViolationException cst) {
-			new LogMessagem().printErrorLog(cst);
-			throw new ConstraintViolationException (log_inserindo, cst.getConstraintViolations());
+		// } catch (ConstraintViolationException cst) {
+		// new LogMessagem().printErrorLog(cst);
+		// throw new ConstraintViolationException(log_inserindo,
+		// cst.getConstraintViolations());
 
-		} catch (Exception e) {
-			new LogMessagem().printErrorLog(e);
-			throw new AppException(log_inserindo, e);
-		}
+		// } catch (Exception e) {
+		// new LogMessagem().printErrorLog(e);
+		// throw new AppException(log_inserindo, e);
+		// }
 
 		new LogMessagem().printInfoLog(log_sucesso);
 		return entity;
@@ -128,21 +133,28 @@ public abstract class AbstractService<T, PK extends Serializable> implements Bas
 	@Override
 	public void deleteById(PK id) {
 
-		new LogMessagem().printInfoLogWithId(log_excluindo, id);
+		log.info(log_excluindo, id);
+		// new LogMessagem().printInfoLogWithId(log_excluindo, id);
 
-		T entity = this.getById(id);
+		Optional<T> entity = this.getById(id);
+		// boolean exists = repository.existsById(id);
+		// if (!exists) {
+		// throw new NotFoundException(Tag.class, "id", id.toString());
+		// }
 
-		beforeDelete(entity);
+		// T entity = this.repository.getOne(id);
+
+		// beforeDelete(entity);
 
 		try {
-			repository.delete(entity);
-			afterDelete(entity);
+			this.repository.deleteById(id);
+			// afterDelete(entity);
 		} catch (Exception e) {
-			new LogMessagem().printErrorLog(e);
+			// new LogMessagem().printErrorLog(e);
 			throw new AppException(log_excluindo, e);
 		}
 
-		new LogMessagem().printInfoLog(log_sucesso);
+		// new LogMessagem().printInfoLog(log_sucesso);
 
 	}
 
@@ -152,19 +164,20 @@ public abstract class AbstractService<T, PK extends Serializable> implements Bas
 		new LogMessagem().printInfoLogWithId(log_editando, entity.getClass().getSimpleName());
 
 		Optional<T> entityAtual = null;
-		//Optional<T> entityAtual = repository.findById( ((BaseEntity<PK>) entity).getId() ); 
+		// Optional<T> entityAtual = repository.findById( ((BaseEntity<PK>)
+		// entity).getId() );
 
-        if (entityAtual.get() == null) {
-            throw new NotFoundException("resource not found");
-        } else {
-        	entityUpdate(entityAtual.get(),entity);	
-        }		
+		if (entityAtual.get() == null) {
+			// throw new NotFoundException("resource not found");
+		} else {
+			entityUpdate(entityAtual.get(), entity);
+		}
 
 		if (isValidacao(entityAtual.get())) {
 			beforeUpdate(entityAtual.get());
 		}
-		
-        try {
+
+		try {
 
 			repository.saveAndFlush(entityAtual.get());
 			afterUpdate(entityAtual.get());
@@ -182,49 +195,66 @@ public abstract class AbstractService<T, PK extends Serializable> implements Bas
 	@Override
 	public T update(T entity, PK id) {
 
-		new LogMessagem().printInfoLogWithId(log_editando, entity.getClass().getSimpleName());
-		
-		Optional<T> entityAtual = repository.findById(id);		
+		Optional<T> entityAtual = this.getById(id);
 
-        if (entityAtual.get() == null) {
-            throw new NotFoundException("resource not found");
-        } else {
-        	entityUpdate(entityAtual.get(),entity);	
-        }
-        
-		if (isValidacao(entityAtual.get())) {
-			beforeUpdate(entityAtual.get());
-		}
-
-		try {
-
-			repository.saveAndFlush(entityAtual.get());
-			afterUpdate(entityAtual.get());
-
-		} catch (Exception e) {
-			new LogMessagem().printErrorLog(e);
-			throw new AppException(log_editando, e);
-		}
-
-		new LogMessagem().printInfoLog(log_sucesso);
+		entityUpdate(entityAtual.get(), entity);
+		repository.saveAndFlush(entityAtual.get());
+		afterUpdate(entityAtual.get());
 		return entityAtual.get();
+
+		/*
+		 * //new LogMessagem().printInfoLogWithId(log_editando,
+		 * entity.getClass().getSimpleName());
+		 * 
+		 * //Optional<T> entityAtual = repository.findById(id);
+		 * 
+		 * if (entityAtual.get() == null) {
+		 * // throw new NotFoundException("resource not found");
+		 * } else {
+		 * entityUpdate(entityAtual.get(), entity);
+		 * }
+		 * 
+		 * if (isValidacao(entityAtual.get())) {
+		 * beforeUpdate(entityAtual.get());
+		 * }
+		 * 
+		 * try {
+		 * 
+		 * repository.saveAndFlush(entityAtual.get());
+		 * afterUpdate(entityAtual.get());
+		 * 
+		 * } catch (Exception e) {
+		 * new LogMessagem().printErrorLog(e);
+		 * throw new AppException(log_editando, e);
+		 * }
+		 * 
+		 * new LogMessagem().printInfoLog(log_sucesso);
+		 * return entityAtual.get();
+		 */
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public T getById(PK id) {
+	public Optional<T> getById(PK id) {
 
-		new LogMessagem().printInfoLogWithId(log_pesquisando, id);
+		// new LogMessagem().printInfoLogWithId(log_pesquisando, id);
 
-		try {
-			T entity = this.getById(id);
-			validarEntidade.validadatorOptional(entity);
-			new LogMessagem().printInfoLog(log_sucesso);
-			return entity;
-		} catch (Exception e) {
-			new LogMessagem().printErrorLog(e);
-			throw new AppException(log_pesquisando, e);
+		// try {
+		// return (Optional<T>) repository.findById(id)
+		// .orElseThrow(() -> new NotFoundException(Tag.class, "id", id.toString()));
+
+		Optional<T> registro = repository.findById(id);
+		if (!registro.isPresent()) {
+			throw new NotFoundException(Tag.class, "id", id.toString());
 		}
+		// validarEntidade.validadatorOptional(registro);
+		// new LogMessagem().printInfoLog(log_sucesso);
+		return registro;
+		// } catch (Exception e) {
+		// new LogMessagem().printErrorLog(e);
+		// throw new AppException(log_pesquisando, e);
+		// }
 
 	}
 
@@ -248,29 +278,18 @@ public abstract class AbstractService<T, PK extends Serializable> implements Bas
 
 	@Override
 	public List<T> getAll() {
-
 		new LogMessagem().printInfoLog(log_listando);
-
 		List<T> list = null;
-
-		try {
-
-			list = repository.findAll();
-			validarEntidade.validadatorOptional(list);
-
-		} catch (Exception e) {
-			new LogMessagem().printErrorLog(e);
-			throw new AppException(log_listando, e);
-
+		list = repository.findAll();
+		if (list.isEmpty()) {
+			throw new NotFoundException(Tag.class, "", "");
 		}
-
 		new LogMessagem().printInfoLog(log_sucesso);
 		return list;
-
 	}
 
 	@Override
-	public Page<T> getAll(Pageable pageable) {
+	public Page<T> getAll(Pageable pageable)  {
 		new LogMessagem().printInfoLog(log_listando);
 
 		Page<T> list = null;
@@ -298,7 +317,7 @@ public abstract class AbstractService<T, PK extends Serializable> implements Bas
 
 		try {
 
-			//list = repository.findAll(search(search), pageable);
+			// list = repository.findAll(search(search), pageable);
 			// validarEntidade.validadatorOptional(list);
 
 		} catch (Exception e) {

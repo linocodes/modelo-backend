@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@PropertySource({ "classpath:persistence-jndi.properties" })
+@PropertySource({ "classpath:persistence-jndi-postgres.properties" })
 @ComponentScan({ "br.gov.mg.meioambiente.persistence" })
 @EnableJpaRepositories(basePackages = "br.gov.mg.meioambiente.persistence.repository.dao")
 public class PersistenceJNDIConfig {
@@ -45,8 +45,7 @@ public class PersistenceJNDIConfig {
 	}
 
 	@Bean
-	public LocalContainerEntityManagerFactoryBean entityManagerFactory(JpaProperties jpaProperties)
-			throws NamingException {
+	public LocalContainerEntityManagerFactoryBean entityManagerFactory(JpaProperties jpaProperties) throws NamingException {
 		final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
 		em.setDataSource(dataSource());
 		em.setPackagesToScan(new String[] { "br.gov.mg.meioambiente.persistence.entity" });

@@ -2,6 +2,7 @@ package br.gov.mg.meioambiente.persistence.service;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,8 +20,7 @@ public interface BaseCrudService<T, PK extends Serializable> {
 
 	T update(T entity, PK id);
 
-	T getById(PK id);
-
+	Optional<T> getById(PK id);
 
 	T getById(T entity, PK id);
 

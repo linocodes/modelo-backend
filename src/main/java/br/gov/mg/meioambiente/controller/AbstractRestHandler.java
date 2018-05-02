@@ -20,7 +20,7 @@ public abstract class AbstractRestHandler implements ApplicationEventPublisherAw
 
     public static <T> T checkResourceFound(final T resource) {
         if (resource == null) {
-            throw new NotFoundException("resource not found");
+            //throw new NotFoundException("resource not found");
         }
         return resource;
     }

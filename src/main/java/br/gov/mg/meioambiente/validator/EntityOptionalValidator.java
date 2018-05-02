@@ -24,8 +24,10 @@ public class EntityOptionalValidator<ENTITY> {
 	 * 
 	 **/
 	public void validadatorOptional(ENTITY entidade) {
+		/*
 		Optional.ofNullable(entidade).orElseThrow(() -> new NotFoundException(log_nao_encontrado));
 		Optional.of(entidade).orElseThrow(() -> new NotFoundException(log_nao_encontrado));
+		*/
 	}
 
 	/**
@@ -37,13 +39,17 @@ public class EntityOptionalValidator<ENTITY> {
 	 * 
 	 **/
 	public void validadatorOptional(List<ENTITY> entidades) {
+		/*
 		Optional.ofNullable(entidades).orElseThrow(() -> new NotFoundException(log_nao_encontrado));
 		Optional.of(entidades).orElseThrow(() -> new NotFoundException(log_nao_encontrado));
+		*/
 	}
 
 	public void validadatorOptional(Page<ENTITY> entidades) {
+		/*
 		Optional.ofNullable(entidades).orElseThrow(() -> new NotFoundException(log_nao_encontrado));
 		Optional.of(entidades).orElseThrow(() -> new NotFoundException(log_nao_encontrado));
+		*/
 	}
 	
 

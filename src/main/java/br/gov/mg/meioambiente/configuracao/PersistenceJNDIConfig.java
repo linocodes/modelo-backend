@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@PropertySource({ "classpath:persistence-jndi-postgres.properties" })
+@PropertySource({ "classpath:persistence-jndi.properties" })
 @ComponentScan({ "br.gov.mg.meioambiente.persistence" })
 @EnableJpaRepositories(basePackages = "br.gov.mg.meioambiente.persistence.repository.dao")
 public class PersistenceJNDIConfig {
